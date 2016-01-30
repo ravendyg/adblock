@@ -11,21 +11,28 @@
   * therefore bruteforce approach is used: remove, later check and remove again (aprx. loading time in my case 5-7 sec)
   * repeat several times
 */
-function clearStuff () {
-	if (location.host === 'vk.com') {
+
+/* chrome extensions are a real mess - background script can't detect page change when you click a link
+ * need to use content script, but that one can't access DOM
+ * it became even more terrible
+ */
+function clearVkStuff () {
+	if (document.querySelector('#left_ads')) {
 		document.querySelector('#left_ads').remove();
-		console.log('done');
+		console.log('vk cleared');
 	}
 }
 
-clearStuff();
+if (location.host === 'vk.com') {
+	clearVkStuff();
 
-setTimeout(function() {
-	clearStuff();
-}, 5000);
-setTimeout(function() {
-	clearStuff();
-}, 10000);
-setTimeout(function() {
-	clearStuff();
-}, 30000);
+	setTimeout(function() {
+		clearVkStuff();
+	}, 5000);
+	setInterval(function() {
+		clearVkStuff();
+	}, 10000);
+}
+
+
+
