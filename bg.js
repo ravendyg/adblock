@@ -21,17 +21,18 @@ function clearVkStuff () {
 		document.querySelector('#left_ads').remove();
 		console.log('vk cleared');
 	}
+	if (document.querySelector('.ads_ads_news_wrap')) {
+		document.querySelector('.ads_ads_news_wrap').remove();
+		console.log('vk news cleared');
+	}
 }
 
 if (location.host === 'vk.com') {
 	clearVkStuff();
 
-	setTimeout(function() {
-		clearVkStuff();
-	}, 5000);
 	setInterval(function() {
 		clearVkStuff();
-	}, 10000);
+	}, 5000);
 }
 
 
