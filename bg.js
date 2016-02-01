@@ -16,14 +16,36 @@
  * need to use content script, but that one can't access DOM
  * it became even more terrible
  */
+
+function searchAdParent (q) {
+	var z=q.parentElement;
+	if (z.getAttribute('class').trim() === 'feed_row') {
+		return z;
+	} else {
+		return searchAdParent(z);
+	}
+}
 function clearVkStuff () {
-	if (document.querySelector('#left_ads')) {
-		document.querySelector('#left_ads').remove();
+	var tempElement = document.querySelector('#left_ads');
+	if (tempElement) {
+		tempElement.remove();
 		console.log('vk cleared');
 	}
-	if (document.querySelector('.ads_ads_news_wrap')) {
-		document.querySelector('.ads_ads_news_wrap').remove();
+	tempElement = document.querySelector('.ads_ads_news_wrap');
+	if (tempElement) {
+		tempElement.remove();
 		console.log('vk news cleared');
+	}
+	tempElement = document.querySelector('#feed_recommends')
+	if (tempElement) {
+		tempElement.remove();
+		console.log('vk recommend cleared');
+	}
+	tempElement = document.querySelector('span[class*="promoted"]');
+	if (tempElement) {
+		tempElement = searchAdParent(tempElement);
+		tempElement.remove();
+		console.log('vk promoted cleared');
 	}
 }
 
@@ -35,5 +57,8 @@ if (location.host === 'vk.com') {
 	}, 5000);
 }
 
+//getStyle.toString().replace(/if\s\(elem\.id(.|\n[^}])*}/, '').replace(/function(.)*{/, '');
+//getStyle.toString().replace(/if\s\(elem\.id(.|\n)*/, ';return ret;').replace(/function(.)*{/, '');
+//getStyle = new Function('elem', 'name', 'force', getStyle.toString().replace(/if\s\(elem\.id(.|\n)*/, ';return ret;').replace(/function(.)*{/, ''));
 
 
