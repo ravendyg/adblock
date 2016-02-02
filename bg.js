@@ -16,7 +16,7 @@
  * need to use content script, but that one can't access DOM
  * it became even more terrible
  */
-
+/*
 function searchAdParent (q) {
 	var z=q.parentElement;
 	if (z.getAttribute('class').trim() === 'feed_row') {
@@ -25,40 +25,44 @@ function searchAdParent (q) {
 		return searchAdParent(z);
 	}
 }
-function clearVkStuff () {
-	var tempElement = document.querySelector('#left_ads');
-	if (tempElement) {
-		tempElement.remove();
-		console.log('vk cleared');
-	}
-	tempElement = document.querySelector('.ads_ads_news_wrap');
-	if (tempElement) {
-		tempElement.remove();
-		console.log('vk news cleared');
-	}
-	tempElement = document.querySelector('#feed_recommends')
-	if (tempElement) {
-		tempElement.remove();
-		console.log('vk recommend cleared');
-	}
-	tempElement = document.querySelector('span[class*="promoted"]');
-	if (tempElement) {
-		tempElement = searchAdParent(tempElement);
-		tempElement.remove();
-		console.log('vk promoted cleared');
-	}
-}
-
+* */
 if (location.host === 'vk.com') {
-	clearVkStuff();
-
+	// inject modified feed.js
+	function injectScript(file, node) {
+		var th = document.getElementsByTagName(node)[0];
+		var s = document.createElement('script');
+		s.setAttribute('type', 'text/javascript');
+		s.setAttribute('src', file);
+		th.appendChild(s);
+	}
+	injectScript( chrome.extension.getURL('/feed.js'), 'body');
+	
+	function clearVkStuff (name) {
+		var tempElement = document.querySelector(name);
+		if (tempElement) {
+			tempElement.remove();
+			console.log(name + ' cleared');
+		}
+	}
+	var adList = [	'#left_ads',
+					'.ads_ads_news_wrap',
+					'#feed_recommends',
+					'span[class*="promoted"]'];
+	// remove whatever add is there and it's further sources
+	for (var i=0; i<adList.length; i++) {
+		clearVkStuff(adList[i]);
+	}
+	
+/*
 	setInterval(function() {
 		clearVkStuff();
 	}, 5000);
+*/
 }
 
 //getStyle.toString().replace(/if\s\(elem\.id(.|\n[^}])*}/, '').replace(/function(.)*{/, '');
 //getStyle.toString().replace(/if\s\(elem\.id(.|\n)*/, ';return ret;').replace(/function(.)*{/, '');
 //getStyle = new Function('elem', 'name', 'force', getStyle.toString().replace(/if\s\(elem\.id(.|\n)*/, ';return ret;').replace(/function(.)*{/, ''));
+
 
 
