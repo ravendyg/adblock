@@ -22,9 +22,41 @@ if (location.host === 'vk.com') {
 	}
 	
 	burnIt();
-	setInterval(function() {
-		burnIt();
-	}, 500);
+	setInterval(burnIt, 200);
+	
+	function deleteAdPosts () {
+// console.log('deleta ad posts: ' + Date.now());
+		var fr = document.querySelectorAll('.post');
+		for (var i=0; i<fr.length; i++) {
+			// ad post doesn't 'response' or 'comment' options, neither it has an explanation like 'added n photos'
+			if (!fr[i].querySelector('a[class*="repl"]') && (!fr[i].querySelector('.explain') ||
+				!fr[i].querySelector('.explain').textContent)) {
+console.log(fr[i].parentElement);
+				fr[i].parentElement.remove();
+			}
+		}
+	}
+	
+	deleteAdPosts();
+	setInterval(deleteAdPosts, 2000);
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
