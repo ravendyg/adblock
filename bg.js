@@ -8,6 +8,7 @@ if (location.host === 'vk.com') {
 	}
 	
 	var adList = [	'#left_ads',
+                    `#ads_left`,
 					'.ads_ads_news_wrap',
 					'#feed_recommends',
 					'span[class*="promoted"]',
