@@ -9,7 +9,15 @@
     "default_popup": "popup.html"
   },
   "content_scripts": [ {
-    "js": [ "bg.js" ],
+    "js": [ "ct.js" ],
     "matches": [ "http://*/*", "https://*/*"]
-  }]
+  }],
+  "background": {
+      "scripts": ["bg.js"],
+      "persistent": false 
+  },
+  "permissions": [
+    "activeTab",
+    "tabs"
+  ]
 }

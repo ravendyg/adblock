@@ -1,0 +1,1 @@
+/// <reference path="./chrome/chrome.d.ts" />
