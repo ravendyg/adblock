@@ -29,7 +29,6 @@ function burnIt () {
 }
 
 function deleteAdPosts () {
-console.log('posts');
     var fr = document.querySelectorAll('.post');
     for (var i=0; i < fr.length; i++) {
         // ad post doesn't 'response' or 'comment' options, neither it has an explanation like 'added n photos'
@@ -63,24 +62,14 @@ handler.startkinopoisk = function () {
 }
 /*** \kinopoisk */
 
-
-/*** communication part */
-// wait for url addresses
-chrome.runtime.onMessage.addListener( function(message, sender) {
-    for (var i=0; i < blockedUrl.length; i++) {
-        if (message.curUrl.match(blockedUrl[i])) {
-            handler[`start${blockedUrl[i].replace(/\./g,'')}`]();
-            break;
-        }
+/*** processor */
+console.log(location.href);
+for (var i=0; i < blockedUrl.length; i++) {
+    if (location.href.match(blockedUrl[i])) {
+        handler[`start${blockedUrl[i].replace(/\./g,'')}`]();
+        break;
     }
-});
-
-// request url addresses
-chrome.runtime.sendMessage({
-    action: 'get url'
-});
-/*** \communication part */
-
+}
 
 
 

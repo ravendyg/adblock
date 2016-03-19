@@ -11,13 +11,5 @@
   "content_scripts": [ {
     "js": [ "ct.js" ],
     "matches": [ "http://*/*", "https://*/*"]
-  }],
-  "background": {
-      "scripts": ["bg.js"],
-      "persistent": false 
-  },
-  "permissions": [
-    "activeTab",
-    "tabs"
-  ]
+  }]
 }
