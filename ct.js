@@ -8,8 +8,14 @@ var handler = {};
 /*** vk */
 function clearVkStuff (name) {
     var tempElement = document.querySelector(name);
-    if (tempElement) {
-        tempElement.remove();
+    if ( tempElement && tempElement.innerHTML !== '' )
+    {
+        tempElement.innerHTML = '';
+        tempElement.style.position = 'absolute';
+        tempElement.style.width = '1px';
+        tempElement.style.height = '1px';
+        tempElement.style.top = '-1000';
+        tempElement.style.left = '-1000';
         console.log(name + ' cleared');
     }
 }
