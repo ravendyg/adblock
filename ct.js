@@ -73,17 +73,34 @@ handler.startvk =
 handler.startkinopoisk =
   function () {
     console.log(`start kinopoisk`);
+    document.querySelector('html').style.background = 'none';
     if (!!document.querySelector('ul.menu')) {
       var body = document.getElementsByTagName('body')[0];
       body.style.background = '';
     }
     var objs = document.getElementsByTagName('object');
-    if (document.getElementById('top').offsetTop > 0) {
-      body.style.position = 'relative';
-      body.style.top = `-${document.getElementById('top').offsetTop}px`;
-    }
+    // if (document.getElementById('top').offsetTop > 0) {
+    //   body.style.position = 'relative';
+    //   body.style.top = `-${document.getElementById('top').offsetTop}px`;
+    // }
     for (var k=0; k < objs.length; k++) {
       objs[k].remove();
+    }
+
+    var bf = document.getElementById('brandingFlash');
+    if ( bf ) { bf.remove(); }
+
+    // shift menu to the top
+    var form = document.getElementById('top_form');
+    var menu = document.querySelector('ul.menu');
+    var block = document.querySelector('div.png_block');
+    var top = document.getElementById('top');
+    if ( form && menu && block )
+    {
+      form.style.top  = '10px';
+      menu.style.top  = '10px';
+      block.style.top = '10px';
+      top.style.height = (block.offsetHeight + 3) + 'px';
     }
 }
 /*** \kinopoisk */
@@ -103,6 +120,14 @@ handler.startngs =
 
     removeArrSelectors(
       document.querySelectorAll(`div[id*="div-gpt-ad"]`)
+    );
+
+    removeArrSelectors(
+      document.querySelectorAll('[src*="reklama"]')
+    );
+
+    removeArrSelectors(
+      document.querySelectorAll('[href*="reklama"]')
     );
 
     var observer = new MutationObserver(
@@ -172,25 +197,24 @@ for (var i=0; i < blockedUrl.length; i++) {
 }
 
 /** yandex direct */
-setTimeout(
-  () =>
-  {
-    eliminateYandex(
-      document.querySelectorAll('[id*="direct"]')
-    );
-
-    eliminateYandex(
-      document.querySelectorAll('[class*="direct"]')
-    );
-
-    removeArrSelectors(
-      document.querySelectorAll('.adv.adv_pos_top')
-    );
-  },
-  1500
-);
-
 var elYaCount = 0;
+clearAllNonRepeptitiveStuff();
+setTimeout(clearAllNonRepeptitiveStuff, 1500);
+
+function eliminateYandexAll ()
+{
+  eliminateYandex(
+    document.querySelectorAll('[id*="direct"]')
+  );
+
+  eliminateYandex(
+    document.querySelectorAll('[class*="direct"]')
+  );
+
+  removeArrSelectors(
+    document.querySelectorAll('.adv.adv_pos_top')
+  );
+}
 function eliminateYandex (arr)
 {
   for (var i = 0; i < arr.length; i++)
@@ -207,6 +231,21 @@ function eliminateYandex (arr)
       arr[i].remove();
     }
   }
+}
+
+function eliminateVelumAll ()
+{ // found on ngs
+  var arr = document.querySelectorAll('[class*="velum"]');
+  for (var i = 0; i < arr.length; i++)
+  {
+    arr[i].remove();
+  }
+}
+
+function clearAllNonRepeptitiveStuff ()
+{
+  eliminateYandexAll();
+  eliminateVelumAll();
 }
 
 function removeArrSelectors (arr)
