@@ -203,6 +203,11 @@ setTimeout(clearAllNonRepeptitiveStuff, 1500);
 
 function eliminateYandexAll ()
 {
+  var xSelector = document.evaluate("//div[text()=\"Яндекс.Директ\"]", document.documentElement, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+  for (var i = 0; i < xSelector.snapshotLength; i++)
+  {
+    eliminateParent(xSelector.snapshotItem(i));
+  }
   eliminateYandex(
     document.querySelectorAll('[id*="direct"]')
   );
@@ -230,6 +235,15 @@ function eliminateYandex (arr)
     {
       arr[i].remove();
     }
+  }
+}
+
+function eliminateParent(target)
+{
+  let parent = target.parentElement;
+  if (parent)
+  {
+    parent.remove();
   }
 }
 
