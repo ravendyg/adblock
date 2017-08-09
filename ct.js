@@ -284,6 +284,25 @@ function findAndRemoveTrash (trash)
   }
 }
 
+/** medium */
+const clearMediumHeader = () => {
+  const headers = document.querySelectorAll('.metabar');
+  for (let i = 0; i < headers.length; i++) {
+    headers[i] && headers[i].remove();
+  }
+};
+
+const clearMediumFooter = () => {
+  const footer = document.querySelector('.js-stickyFooter');
+  footer && footer.remove();
+};
+/** /medium */
+
+if (/medium\.com/.test(location.href)) {
+  clearMediumHeader();
+  clearMediumFooter();
+}
+
 
 
 
