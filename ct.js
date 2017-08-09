@@ -298,7 +298,7 @@ const clearMediumFooter = () => {
 };
 /** /medium */
 
-if (/medium\.com/.test(location.href)) {
+if (/medium\./.test(location.href)) {
   clearMediumHeader();
   clearMediumFooter();
 }
