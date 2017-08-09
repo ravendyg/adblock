@@ -196,6 +196,11 @@ for (var i=0; i < blockedUrl.length; i++) {
     }
 }
 
+if (/www\.joelonsoftware\.com/.test(location.href)) {
+  var header = document.getElementById('masthead');
+  header && header.remove();
+}
+
 /** yandex direct */
 var elYaCount = 0;
 clearAllNonRepeptitiveStuff();
