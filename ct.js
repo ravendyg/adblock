@@ -271,7 +271,7 @@ function removeArrSelectors (arr)
 {
   for (var i = 0; i < arr.length; i++)
   {
-    arr[i].remove();
+    (!/content/.test(arr[i].getAttribute('class'))) && arr[i].remove();
   }
 }
 
