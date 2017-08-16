@@ -196,11 +196,6 @@ for (var i=0; i < blockedUrl.length; i++) {
     }
 }
 
-if (/www\.joelonsoftware\.com/.test(location.href)) {
-  var header = document.getElementById('masthead');
-  header && header.remove();
-}
-
 /** yandex direct */
 var elYaCount = 0;
 clearAllNonRepeptitiveStuff();
@@ -282,25 +277,6 @@ function findAndRemoveTrash (trash)
   {
       trash.remove();
   }
-}
-
-/** medium */
-const clearMediumHeader = () => {
-  const headers = document.querySelectorAll('.metabar');
-  for (let i = 0; i < headers.length; i++) {
-    headers[i] && headers[i].remove();
-  }
-};
-
-const clearMediumFooter = () => {
-  const footer = document.querySelector('.js-stickyFooter');
-  footer && footer.remove();
-};
-/** /medium */
-
-if (/medium\./.test(location.href)) {
-  clearMediumHeader();
-  clearMediumFooter();
 }
 
 
