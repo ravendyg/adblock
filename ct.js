@@ -102,6 +102,8 @@ handler.startkinopoisk =
       block.style.top = '10px';
       top.style.height = (block.offsetHeight + 3) + 'px';
     }
+    var someBanner = document.querySelector('a[href*="https://awaps"]');
+    someBanner && someBanner.parentElement.remove();
 }
 /*** \kinopoisk */
 
