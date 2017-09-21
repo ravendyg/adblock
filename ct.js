@@ -1,7 +1,7 @@
 /// <reference path="./typings/tsd.d.ts" />
 'use strict';
 
-var blockedUrl = ['vk.', 'kinopoisk.', 'ngs.', '2gis.'];
+var blockedUrl = ['vk.', 'kinopoisk.', 'ngs.', '2gis.', 'yandex.'];
 // , `ngs.`];
 var handler = {};
 
@@ -187,6 +187,16 @@ handler.start2gis =
 
 /** /2gis */
 
+
+handler.startyandex = () => {
+  const scripts = document.querySelectorAll('script');
+  for (let i = 0; i < scripts.length; i++) {
+    if (!scripts[i].src && (scripts[i].parentElement.getAttribute('class') || '').split(/\s/).length === 2) {
+      eliminateParent(scripts[i]);
+    }
+  }
+}
+
 /** processor
  *
  * start up remove tasks
@@ -280,6 +290,8 @@ function findAndRemoveTrash (trash)
       trash.remove();
   }
 }
+
+
 
 
 
