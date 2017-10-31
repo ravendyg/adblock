@@ -40,6 +40,11 @@ function burnIt () {
         posts[i].remove();
         console.log('vk: remove ad post');
       }
+      else if (/__[0-9]{1,}/.test(posts[i].getAttribute('id')))
+      {
+        posts[i].remove();
+        console.log('vk: remove "актуальные новости"');
+      }
     }
 }
 
@@ -187,7 +192,7 @@ handler.start2gis =
 
 /** /2gis */
 
-
+/*
 handler.startyandex = () => {
   const scripts = document.querySelectorAll('script');
   for (let i = 0; i < scripts.length; i++) {
@@ -196,7 +201,7 @@ handler.startyandex = () => {
     }
   }
 }
-
+*/
 /** processor
  *
  * start up remove tasks
