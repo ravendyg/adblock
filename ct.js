@@ -220,7 +220,6 @@ handler.startyandex = () => {
  * start up remove tasks
  */
 for (let key of Object.keys(blocker)) {
-  debugger
   if (blocker[key].reg.test(location.href)) {
     blocker[key].cleaner();
     break;
