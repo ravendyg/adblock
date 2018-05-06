@@ -154,6 +154,7 @@ const blocker = {
       });
     }
   },
+
 }
 
 /*** vk */
@@ -205,16 +206,7 @@ function deleteVkTrash() {
   findAndRemoveTrash( document.getElementById('video_content_catalog') );
 }
 
-/*
-handler.startyandex = () => {
-  const scripts = document.querySelectorAll('script');
-  for (let i = 0; i < scripts.length; i++) {
-    if (!scripts[i].src && (scripts[i].parentElement.getAttribute('class') || '').split(/\s/).length === 2) {
-      eliminateParent(scripts[i]);
-    }
-  }
-}
-*/
+
 /** processor
  *
  * start up remove tasks
@@ -231,42 +223,6 @@ var elYaCount = 0;
 clearAllNonRepeptitiveStuff();
 setTimeout(clearAllNonRepeptitiveStuff, 1500);
 
-// function eliminateYandexAll ()
-// {
-//   var xSelector = document.evaluate("//div[text()=\"Яндекс.Директ\"]", document.documentElement, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-//   for (var i = 0; i < xSelector.snapshotLength; i++)
-//   {
-//     eliminateParent(xSelector.snapshotItem(i));
-//   }
-//   eliminateYandex(
-//     document.querySelectorAll('[id*="direct"]')
-//   );
-
-//   eliminateYandex(
-//     document.querySelectorAll('[class*="direct"]')
-//   );
-
-//   removeArrSelectors(
-//     document.querySelectorAll('.adv.adv_pos_top')
-//   );
-// }
-// function eliminateYandex (arr)
-// {
-//   for (var i = 0; i < arr.length; i++)
-//   {
-//     console.log('eliminate yandex: ' + (++elYaCount) );
-
-//     var cl = arr[i].getAttribute('class');
-//     var id = arr[i].getAttribute('id');
-//     if (
-//       cl && cl.match('yandex') ||
-//       id && id .match('yandex')
-//     )
-//     {
-//       arr[i].remove();
-//     }
-//   }
-// }
 
 function eliminateParent(target)
 {
@@ -277,8 +233,9 @@ function eliminateParent(target)
   }
 }
 
-function eliminateVelumAll ()
-{ // found on ngs
+
+function eliminateVelumAll () {
+  // found on ngs
   var arr = document.querySelectorAll('[class*="velum"]');
   for (var i = 0; i < arr.length; i++)
   {
@@ -286,8 +243,15 @@ function eliminateVelumAll ()
   }
 }
 
-function clearAllNonRepeptitiveStuff () {
-  // eliminateYandexAll();
+
+function eliinateYandexDirect() {
+  const nodes = [...document.querySelectorAll('yatag')];
+  nodes.forEach(node => node.remove());
+}
+
+
+function clearAllNonRepeptitiveStuff() {
+  eliinateYandexDirect();
   eliminateVelumAll();
 }
 
