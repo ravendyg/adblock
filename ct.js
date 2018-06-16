@@ -139,6 +139,10 @@ const blocker = {
   pogoda: {
     reg: /yandex\.ru\/pogoda/,
     cleaner() {
+      removeYandexByRoot();
+      const interval = setInterval(removeYandexByRoot, 100);
+      setTimeout(() => clearInterval(interval), 2000);
+
       const content = document.querySelector('.forecast-details');
       if (!content) return;
 
@@ -197,6 +201,10 @@ function burnIt () {
         posts[i].remove();
         console.log('vk: remove "актуальные новости"');
       }
+    }
+
+    for (let node of document.querySelectorAll('._ads_promoted_post')) {
+      node.remove();
     }
 }
 
@@ -270,6 +278,22 @@ function findAndRemoveTrash (trash)
   {
       trash.remove();
   }
+}
+
+function removeYandexByRoot() {
+  const body = document.getElementsByTagName('body')[0];
+  let roots = [];
+  const findRoot = (el) => {
+    if (el.shadowRoot) {
+      roots.push(el);
+    } else {
+      [...el.children].forEach(findRoot);
+    }
+  }
+
+  findRoot(body);
+  // if necessary add some checks for node.parentElement class to be smth like "waRUD waRUDQVnzS6Ph1GYCaKNKJph5RzY"
+  roots.forEach(node => node.remove());
 }
 
 
