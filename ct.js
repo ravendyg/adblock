@@ -159,6 +159,26 @@ const blocker = {
     }
   },
 
+  quora: {
+    reg: /.*quora\.com.*/,
+    cleaner() {
+      // remove overlay
+      const signupWrapperReg = /.*signup_wall_wrapper.*/;
+      const list = [...document.querySelectorAll('body>div')];
+      list.forEach(div => {
+        if (div && signupWrapperReg.test(div.id)) {
+          typeof div.remove === 'function' && div.remove();
+        }
+      });
+      // remove blur
+      const content = document.querySelector('.ContentWrapper');
+      if (content) {
+        content.style.filter = 'inherit';
+        content.style.webkitFilter = 'inherit';
+      }
+    },
+  },
+
 }
 
 /*** vk */
