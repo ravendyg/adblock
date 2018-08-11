@@ -139,23 +139,30 @@ const blocker = {
   pogoda: {
     reg: /yandex\.ru\/pogoda/,
     cleaner() {
-      removeYandexByRoot();
-      const interval = setInterval(removeYandexByRoot, 100);
-      setTimeout(() => clearInterval(interval), 2000);
-
-      const content = document.querySelector('.forecast-details');
-      if (!content) return;
-
-      const forecastReg = /^forecast/;
-      const rows = [...content.children];
-      rows.forEach(row => {
-        const classes = (row.getAttribute('class') || '').split(/\s/);
-        classes.forEach(klass => {
-          if (!forecastReg.test(klass)) {
-            row.remove();
+      const re = /_/;
+      /**
+       * @param {HTMLDivElement} div
+       */
+      const clean = (div) => {
+        const klass = div.getAttribute('class');
+        const klassChunks = klass.split(' ');
+        if (klassChunks.length === 2) {
+          const prefix = klassChunks[0].slice(0, 5);
+          if (prefix === klassChunks[1].slice(0, 5)
+            && !re.test(klassChunks[0])
+            && !re.test(klassChunks[1])
+          ) {
+            return div.remove();
           }
-        })
-      });
+        }
+        [...div.children].forEach(child => {
+          if (child.tagName === 'DIV') {
+            clean(child);
+          }
+        });
+      };
+      const body = document.body;
+      body && clean(body);
     }
   },
 
@@ -263,50 +270,14 @@ function clearAllNonRepeptitiveStuff() {
   eliminateVelumAll();
 }
 
-function removeArrSelectors (arr)
-{
-  for (var i = 0; i < arr.length; i++)
-  {
+function removeArrSelectors (arr) {
+  for (var i = 0; i < arr.length; i++) {
     (!/content/.test(arr[i].getAttribute('class'))) && arr[i].remove();
   }
 }
 
-
-function findAndRemoveTrash (trash)
-{
-  if (trash)
-  {
+function findAndRemoveTrash(trash) {
+  if (trash) {
       trash.remove();
   }
 }
-
-function removeYandexByRoot() {
-  const body = document.getElementsByTagName('body')[0];
-  let roots = [];
-  const findRoot = (el) => {
-    if (el.shadowRoot) {
-      roots.push(el);
-    } else {
-      [...el.children].forEach(findRoot);
-    }
-  }
-
-  findRoot(body);
-  // if necessary add some checks for node.parentElement class to be smth like "waRUD waRUDQVnzS6Ph1GYCaKNKJph5RzY"
-  roots.forEach(node => node.remove());
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
