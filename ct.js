@@ -139,21 +139,29 @@ const blocker = {
   pogoda: {
     reg: /yandex\.ru\/pogoda/,
     cleaner() {
-      const re = /_/;
+      const areAdChunks = ([ch1, ch2]) => {
+        if (ch2.length < ch1.length) {
+          return false;
+        }
+        let i = 0;
+        for (; i < ch1.length; i++) {
+          if (ch1[i] !== ch2[i]) {
+            return false;
+          }
+        }
+        if (ch2[i] === '_') {
+          return false;
+        }
+        return true;
+      };
       /**
        * @param {HTMLDivElement} div
        */
       const clean = (div) => {
-        const klass = div.getAttribute('class');
+        const klass = div.getAttribute('class') || '';
         const klassChunks = klass.split(' ');
-        if (klassChunks.length === 2) {
-          const prefix = klassChunks[0].slice(0, 5);
-          if (prefix === klassChunks[1].slice(0, 5)
-            && !re.test(klassChunks[0])
-            && !re.test(klassChunks[1])
-          ) {
-            return div.remove();
-          }
+        if (klassChunks.length === 2 && areAdChunks(klassChunks)) {
+          return div.remove();
         }
         [...div.children].forEach(child => {
           if (child.tagName === 'DIV') {
@@ -246,12 +254,14 @@ function deleteVkTrash() {
  *
  * start up remove tasks
  */
-for (let key of Object.keys(blocker)) {
-  if (blocker[key].reg.test(location.href)) {
-    blocker[key].cleaner();
-    break;
+const doClean = () => {
+  for (let key of Object.keys(blocker)) {
+    if (blocker[key].reg.test(location.href)) {
+      blocker[key].cleaner();
+      break;
+    }
   }
-}
+};
 
 /** yandex direct */
 var elYaCount = 0;
@@ -301,3 +311,5 @@ function findAndRemoveTrash(trash) {
       trash.remove();
   }
 }
+
+doClean();
