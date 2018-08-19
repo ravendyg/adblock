@@ -155,16 +155,17 @@ const blocker = {
         return true;
       };
       /**
-       * @param {HTMLDivElement} div
+       * @param {HTMLDivElement} elem
        */
-      const clean = (div) => {
-        const klass = div.getAttribute('class') || '';
+      const clean = (elem) => {
+        const klass = elem.getAttribute('class') || '';
         const klassChunks = klass.split(' ');
         if (klassChunks.length === 2 && areAdChunks(klassChunks)) {
-          return div.remove();
+          return elem.remove();
         }
-        [...div.children].forEach(child => {
-          if (child.tagName === 'DIV') {
+        [...elem.children].forEach(child => {
+          const { tagName } = child;
+          if (tagName === 'DIV' || tagName === 'DD') {
             clean(child);
           }
         });
