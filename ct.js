@@ -2,206 +2,198 @@
 'use strict';
 
 const blocker = {
-  vk: {
-    reg: /vk\./,
-    cleaner() {
-      console.log(`start vk`);
+    vk: {
+        reg: /vk\./,
+        cleaner() {
+            console.log(`start vk`);
 
-      burnIt();
-      deleteVkTrash();
+            burnIt();
+            deleteVkTrash();
 
-      setInterval(
-        () => {
-          burnIt();
-          deleteVkTrash();
-        }, 200
-      );
+            setInterval(
+                () => {
+                    burnIt();
+                    deleteVkTrash();
+                }, 200
+            );
+        },
     },
-  },
 
-  kinopoisk: {
-    reg: /kinopoisk\./,
-    cleaner() {
-      console.log(`start kinopoisk`);
-      document.querySelector('html').style.background = 'none';
-      if (!!document.querySelector('ul.menu')) {
-        var body = document.getElementsByTagName('body')[0];
-        body.style.background = '';
-      }
-      var objs = document.getElementsByTagName('object');
-      // if (document.getElementById('top').offsetTop > 0) {
-      //   body.style.position = 'relative';
-      //   body.style.top = `-${document.getElementById('top').offsetTop}px`;
-      // }
-      for (var k=0; k < objs.length; k++) {
-        objs[k].remove();
-      }
-
-      var bf = document.getElementById('brandingFlash');
-      if ( bf ) { bf.remove(); }
-
-      // shift menu to the top
-      var form = document.getElementById('top_form');
-      var menu = document.querySelector('ul.menu');
-      var block = document.querySelector('div.png_block');
-      var top = document.getElementById('top');
-      if ( form && menu && block )
-      {
-        form.style.top  = '10px';
-        menu.style.top  = '10px';
-        block.style.top = '10px';
-        top.style.height = (block.offsetHeight + 3) + 'px';
-      }
-      var someBanner = document.querySelector('a[href*="https://awaps"]');
-      someBanner && someBanner.parentElement.remove();
-    }
-  },
-
-  ngs: {
-    reg: /ngs\./,
-    cleaner() {
-      findAndRemoveTrash( document.querySelector('.edition-phone-footer') );
-
-          removeArrSelectors(
-            document.querySelectorAll(`div[class*="popup"]`)
-          );
-
-          removeArrSelectors(
-            document.querySelectorAll(`div[class*="banner"]`)
-          );
-
-          removeArrSelectors(
-            document.querySelectorAll(`div[id*="div-gpt-ad"]`)
-          );
-
-          removeArrSelectors(
-            document.querySelectorAll('[src*="reklama"]')
-          );
-
-          removeArrSelectors(
-            document.querySelectorAll('[href*="reklama"]')
-          );
-
-          var observer = new MutationObserver(
-            mutations =>
-            {
-              console.log(mutations);
-              for (var i = 0; i < mutations.length; i++)
-              {
-                mutations[i].target.style.overflow = '';
-              }
+    kinopoisk: {
+        reg: /kinopoisk\./,
+        cleaner() {
+            console.log(`start kinopoisk`);
+            document.querySelector('html').style.background = 'none';
+            if (!!document.querySelector('ul.menu')) {
+                var body = document.getElementsByTagName('body')[0];
+                body.style.background = '';
             }
-          );
-
-          var targetBody = document.getElementsByTagName('body')[0];
-          observer.observe(targetBody, { attributes : true, attributeFilter : ['style'] });
-          var targetHtml = document.getElementsByTagName('html')[0];
-          observer.observe(targetHtml, { attributes : true, attributeFilter : ['style'] });
-      }
-  },
-
-  gis2: {
-    reg: /2gis\./,
-    cleaner() {
-      let
-        clear1 = false,
-        clear2 = false,
-        counter = 0
-        ;
-      const search =
-        setInterval(
-          () =>
-          {
-            var target = document.querySelector('.dashboard__promo');
-            if ( target.textContent.match('Adblock') )
-            {
-              target.remove();
-              clear1 = true;
-            }
-            target = document.querySelector('.promoTooltip');
-            if ( target )
-            {
-              target.remove();
-              clear2 = true;
+            var objs = document.getElementsByTagName('object');
+            // if (document.getElementById('top').offsetTop > 0) {
+            //   body.style.position = 'relative';
+            //   body.style.top = `-${document.getElementById('top').offsetTop}px`;
+            // }
+            for (var k = 0; k < objs.length; k++) {
+                objs[k].remove();
             }
 
-            counter++;
-            if ( (clear1 && clear2) || counter > 25)
-            {
-              clearInterval(search);
+            var bf = document.getElementById('brandingFlash');
+            if (bf) { bf.remove(); }
+
+            // shift menu to the top
+            var form = document.getElementById('top_form');
+            var menu = document.querySelector('ul.menu');
+            var block = document.querySelector('div.png_block');
+            var top = document.getElementById('top');
+            if (form && menu && block) {
+                form.style.top = '10px';
+                menu.style.top = '10px';
+                block.style.top = '10px';
+                top.style.height = (block.offsetHeight + 3) + 'px';
             }
-          },
-          200
-        );
-    }
-  },
-
-  pogoda: {
-    reg: /yandex\.ru\/pogoda/,
-    cleaner() {
-      const areAdChunks = ([ch1, ch2]) => {
-        if (ch2.length < ch1.length) {
-          return false;
+            var someBanner = document.querySelector('a[href*="https://awaps"]');
+            someBanner && someBanner.parentElement.remove();
         }
-        let i = 0;
-        for (; i < ch1.length; i++) {
-          if (ch1[i] !== ch2[i]) {
-            return false;
-          }
-        }
-        if (ch2[i] === '_') {
-          return false;
-        }
-        return true;
-      };
-      /**
-       * @param {HTMLDivElement} elem
-       */
-      const clean = (elem) => {
-        const klass = elem.getAttribute('class') || '';
-        const klassChunks = klass.split(' ');
-        if (klassChunks.length === 2 && areAdChunks(klassChunks)) {
-          return elem.remove();
-        }
-        [...elem.children].forEach(child => {
-          const { tagName } = child;
-          if (tagName === 'DIV' || tagName === 'DD') {
-            clean(child);
-          }
-        });
-      };
-      const body = document.body;
-      body && clean(body);
-    }
-  },
-
-  quora: {
-    reg: /.*quora\.com.*/,
-    cleaner() {
-      // remove overlay
-      const signupWrapperReg = /.*signup_wall_wrapper.*/;
-      const list = [...document.querySelectorAll('body>div')];
-      list.forEach(div => {
-        if (div && signupWrapperReg.test(div.id)) {
-          typeof div.remove === 'function' && div.remove();
-        }
-      });
-      // remove blur
-      const content = document.querySelector('.ContentWrapper');
-      if (content) {
-        content.style.filter = 'inherit';
-        content.style.webkitFilter = 'inherit';
-      }
     },
-  },
+
+    ngs: {
+        reg: /ngs\./,
+        cleaner() {
+            findAndRemoveTrash(document.querySelector('.edition-phone-footer'));
+
+            removeArrSelectors(
+                document.querySelectorAll(`div[class*="popup"]`)
+            );
+
+            removeArrSelectors(
+                document.querySelectorAll(`div[class*="banner"]`)
+            );
+
+            removeArrSelectors(
+                document.querySelectorAll(`div[id*="div-gpt-ad"]`)
+            );
+
+            removeArrSelectors(
+                document.querySelectorAll('[src*="reklama"]')
+            );
+
+            removeArrSelectors(
+                document.querySelectorAll('[href*="reklama"]')
+            );
+
+            var observer = new MutationObserver(
+                mutations => {
+                    console.log(mutations);
+                    for (var i = 0; i < mutations.length; i++) {
+                        mutations[i].target.style.overflow = '';
+                    }
+                }
+            );
+
+            var targetBody = document.getElementsByTagName('body')[0];
+            observer.observe(targetBody, { attributes: true, attributeFilter: ['style'] });
+            var targetHtml = document.getElementsByTagName('html')[0];
+            observer.observe(targetHtml, { attributes: true, attributeFilter: ['style'] });
+        }
+    },
+
+    gis2: {
+        reg: /2gis\./,
+        cleaner() {
+            let
+                clear1 = false,
+                clear2 = false,
+                counter = 0
+                ;
+            const search =
+                setInterval(
+                    () => {
+                        var target = document.querySelector('.dashboard__promo');
+                        if (target && target.textContent.match('Adblock')) {
+                            target.remove();
+                            clear1 = true;
+                        }
+                        target = document.querySelector('.promoTooltip');
+                        if (target) {
+                            target.remove();
+                            clear2 = true;
+                        }
+
+                        counter++;
+                        if ((clear1 && clear2) || counter > 25) {
+                            clearInterval(search);
+                        }
+                    },
+                    200
+                );
+        }
+    },
+
+    pogoda: {
+        reg: /yandex\.ru\/pogoda/,
+        cleaner() {
+            const areAdChunks = ([ch1, ch2]) => {
+                if (ch2.length < ch1.length) {
+                    return false;
+                }
+                let i = 0;
+                for (; i < ch1.length; i++) {
+                    if (ch1[i] !== ch2[i]) {
+                        return false;
+                    }
+                }
+                if (ch2[i] === '_') {
+                    return false;
+                }
+                return true;
+            };
+            /**
+             * @param {HTMLDivElement} elem
+             */
+            const clean = (elem) => {
+                const klass = elem.getAttribute('class') || '';
+                const klassChunks = klass.split(' ');
+                if (klassChunks.length === 2 && areAdChunks(klassChunks)) {
+                    return elem.remove();
+                }
+                [...elem.children].forEach(child => {
+                    const { tagName } = child;
+                    if (tagName === 'DIV' || tagName === 'DD') {
+                        clean(child);
+                    }
+                });
+            };
+            const body = document.body;
+            body && clean(body);
+        }
+    },
+
+    quora: {
+        reg: /.*quora\.com.*/,
+        cleaner() {
+            // remove overlay
+            const signupWrapperReg = /.*signup_wall_wrapper.*/;
+            const list = [...document.querySelectorAll('body>div')];
+            list.forEach(div => {
+                if (div && signupWrapperReg.test(div.id)) {
+                    typeof div.remove === 'function' && div.remove();
+                }
+            });
+            // remove blur
+            const content = document.querySelector('.ContentWrapper');
+            if (content) {
+                content.style.filter = 'inherit';
+                content.style.webkitFilter = 'inherit';
+            }
+        },
+    },
 
 }
 
 /*** vk */
-function clearVkStuff (name) {
+function clearVkStuff(name) {
     var tempElement = document.querySelector(name);
-    if ( tempElement && tempElement.innerHTML !== '' )
-    {
+    if (tempElement && tempElement.innerHTML !== '') {
         tempElement.innerHTML = '';
         tempElement.style.position = 'absolute';
         tempElement.style.width = '1px';
@@ -213,41 +205,38 @@ function clearVkStuff (name) {
 }
 
 var adList =
-[
-  '#left_ads',
-  `#ads_left`
-];
+    [
+        '#left_ads',
+        `#ads_left`
+    ];
 
 // remove whatever add is there and it's further sources
-function burnIt () {
-    for (var i=0; i < adList.length; i++) {
+function burnIt() {
+    for (var i = 0; i < adList.length; i++) {
         clearVkStuff(adList[i]);
     }
 
     var posts = document.querySelectorAll('.feed_row');
-    for (var i = 0; i < posts.length; i++)
-    {
-      if (!!posts[i].textContent.toLowerCase().match('рекламная'))
-      {
-        posts[i].remove();
-        console.log('vk: remove ad post');
-      }
-      else if (/__[0-9]{1,}/.test(posts[i].getAttribute('id')))
-      {
-        posts[i].remove();
-        console.log('vk: remove "актуальные новости"');
-      }
+    for (var i = 0; i < posts.length; i++) {
+        if (!!posts[i].textContent.toLowerCase().match('рекламная')) {
+            posts[i].remove();
+            console.log('vk: remove ad post');
+        }
+        else if (/__[0-9]{1,}/.test(posts[i].getAttribute('id'))) {
+            posts[i].remove();
+            console.log('vk: remove "актуальные новости"');
+        }
     }
 
     for (let node of document.querySelectorAll('._ads_promoted_post')) {
-      node.remove();
+        node.remove();
     }
 }
 
 function deleteVkTrash() {
-  findAndRemoveTrash( document.getElementById('video_content_catalog') );
-  findAndRemoveTrash( document.getElementById('videocat_other_blocks') );
-  findAndRemoveTrash( document.getElementById('video_content_catalog') );
+    findAndRemoveTrash(document.getElementById('video_content_catalog'));
+    findAndRemoveTrash(document.getElementById('videocat_other_blocks'));
+    findAndRemoveTrash(document.getElementById('video_content_catalog'));
 }
 
 
@@ -256,12 +245,12 @@ function deleteVkTrash() {
  * start up remove tasks
  */
 const doClean = () => {
-  for (let key of Object.keys(blocker)) {
-    if (blocker[key].reg.test(location.href)) {
-      blocker[key].cleaner();
-      break;
+    for (let key of Object.keys(blocker)) {
+        if (blocker[key].reg.test(location.href)) {
+            blocker[key].cleaner();
+            break;
+        }
     }
-  }
 };
 
 /** yandex direct */
@@ -270,47 +259,44 @@ clearAllNonRepeptitiveStuff();
 setTimeout(clearAllNonRepeptitiveStuff, 1500);
 
 
-function eliminateParent(target)
-{
-  let parent = target.parentElement;
-  if (parent)
-  {
-    parent.remove();
-  }
+function eliminateParent(target) {
+    let parent = target.parentElement;
+    if (parent) {
+        parent.remove();
+    }
 }
 
 
-function eliminateVelumAll () {
-  // found on ngs
-  var arr = document.querySelectorAll('[class*="velum"]');
-  for (var i = 0; i < arr.length; i++)
-  {
-    arr[i].remove();
-  }
+function eliminateVelumAll() {
+    // found on ngs
+    var arr = document.querySelectorAll('[class*="velum"]');
+    for (var i = 0; i < arr.length; i++) {
+        arr[i].remove();
+    }
 }
 
 
 function eliinateYandexDirect() {
-  const nodes = [...document.querySelectorAll('yatag')];
-  nodes.forEach(node => node.remove());
+    const nodes = [...document.querySelectorAll('yatag')];
+    nodes.forEach(node => node.remove());
 }
 
 
 function clearAllNonRepeptitiveStuff() {
-  eliinateYandexDirect();
-  eliminateVelumAll();
+    eliinateYandexDirect();
+    eliminateVelumAll();
 }
 
-function removeArrSelectors (arr) {
-  for (var i = 0; i < arr.length; i++) {
-    (!/content/.test(arr[i].getAttribute('class'))) && arr[i].remove();
-  }
+function removeArrSelectors(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        (!/content/.test(arr[i].getAttribute('class'))) && arr[i].remove();
+    }
 }
 
 function findAndRemoveTrash(trash) {
-  if (trash) {
-      trash.remove();
-  }
+    if (trash) {
+        trash.remove();
+    }
 }
 
 doClean();
