@@ -228,6 +228,10 @@ function burnIt() {
         }
     }
 
+    for (const it of document.querySelectorAll('.stories_feed_with_thumb')) {
+        it.remove();
+    }
+
     for (let node of document.querySelectorAll('._ads_promoted_post')) {
         node.remove();
     }
