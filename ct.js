@@ -132,39 +132,42 @@ const blocker = {
     pogoda: {
         reg: /yandex\.ru\/pogoda/,
         cleaner() {
-            const areAdChunks = ([ch1, ch2]) => {
-                if (ch2.length < ch1.length) {
-                    return false;
-                }
-                let i = 0;
-                for (; i < ch1.length; i++) {
-                    if (ch1[i] !== ch2[i]) {
-                        return false;
+            // ads
+            let schedule = -1;
+            let attempts = 20;
+            const yaClean = () => {
+                console.log('try ya clean');
+                const cards = Array.from(document.querySelectorAll('.card'));
+                for (const card of cards) {
+                    const classes = (card.getAttribute('class') || '').split(/\s/);
+                    // ads has two classes: card and *
+                    if ((classes.length === 2 || classes.length === 3) && classes[0] == 'card') {
+                        card.remove();
                     }
                 }
-                if (ch2[i] === '_') {
-                    return false;
+                attempts--;
+                if (attempts <= 0) {
+                    clearInterval(schedule);
                 }
-                return true;
             };
-            /**
-             * @param {HTMLDivElement} elem
-             */
-            const clean = (elem) => {
-                const klass = elem.getAttribute('class') || '';
-                const klassChunks = klass.split(' ');
-                if (klassChunks.length === 2 && areAdChunks(klassChunks)) {
-                    return elem.remove();
-                }
-                [...elem.children].forEach(child => {
-                    const { tagName } = child;
-                    if (tagName === 'DIV' || tagName === 'DD') {
-                        clean(child);
-                    }
-                });
-            };
-            const body = document.body;
-            body && clean(body);
+            schedule = setInterval(yaClean, 50);
+            // popup
+            let el = document.querySelector('.footer');
+            if (el) {
+                el = el.nextElementSibling;
+            }
+            while (el) {
+                const tmp = el;
+                el = el.nextElementSibling;
+                tmp.remove();
+            }
+            // right add
+            let contentBottom = document.querySelector('.content__bottom');
+            let maybeAd = contentBottom.nextElementSibling;
+            const klass = maybeAd.getAttribute('class');
+            if (klass.indexOf('segment') === -1) {
+                maybeAd.remove();
+            }
         }
     },
 
